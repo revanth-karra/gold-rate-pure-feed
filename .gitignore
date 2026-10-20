@@ -1,0 +1,7 @@
+*.jks
+*.keystore
+*.p12
+PASSWORDS.txt
+KEYSTORE_BASE64.txt
+.env
+site/rates.json
