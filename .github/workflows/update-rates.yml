@@ -1,0 +1,52 @@
+name: Update rates
+
+on:
+  schedule:
+    - cron: "7,37 * * * 1-5"   # every 30 minutes, Monday to Friday
+    - cron: "17 6 * * 0,6"     # once a day at the weekend
+    - cron: "23 3 1 * *"       # monthly keep-alive (GitHub pauses schedules after 60 quiet days)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Fetch prices
+        run: node update.mjs
+        env:
+          PREV_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/rates.json
+          GOLD_API_KEY: ${{ secrets.GOLD_API_KEY }}
+      - name: Keep schedule alive
+        if: github.event.schedule == '23 3 1 * *'
+        run: |
+          date -u > keepalive.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898299+github-actions[bot]@users.noreply.github.com"
+          git add keepalive.txt && git commit -m "Monthly keep-alive" && git push
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4
