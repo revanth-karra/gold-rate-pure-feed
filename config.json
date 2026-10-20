@@ -1,0 +1,29 @@
+{
+  "_note": "Edit these if the government changes duty or GST, or to add festival dates each year. premiumGold/premiumSilver = how far Indian bullion rates sit above the landed price (0.01 = 1%); compare with a trusted daily rate now and then and adjust. The app picks up changes within 30 minutes. No app update needed.",
+  "dutyGold": 0.15,
+  "dutySilver": 0.15,
+  "premiumGold": 0.01,
+  "premiumSilver": 0.045,
+  "gst": 0.03,
+  "maxJumpPercent": 12,
+  "festivals": [
+    {
+      "id": "dhanteras26",
+      "key": "dhanteras",
+      "en": "Dhanteras",
+      "date": "2026-11-06"
+    },
+    {
+      "id": "diwali26",
+      "key": "diwali",
+      "en": "Diwali",
+      "date": "2026-11-08"
+    },
+    {
+      "id": "diwali27",
+      "key": "diwali",
+      "en": "Diwali",
+      "date": "2027-10-29"
+    }
+  ]
+}
